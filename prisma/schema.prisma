@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Startup {
+  id             String    @id @default(cuid())
+  name           String
+  description    String
+  sector         String
+  industry       String
+  impactScore    Int?
+  financialScore Int?
+  overallScore   Int?
+  watchlists     Watchlist[]
+}
+
+model Investor {
+  id         String      @id @default(cuid())
+  name       String
+  watchlists Watchlist[]
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  investor  Investor @relation(fields: [investorId], references: [id])
+  investorId String
+  startup   Startup  @relation(fields: [startupId], references: [id])
+  startupId String
+}
+
+model Analysis {
+  id      String @id @default(cuid())
+  content String
+}
