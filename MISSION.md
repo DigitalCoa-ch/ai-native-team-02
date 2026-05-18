@@ -14,3 +14,10 @@ The Lab Director has initialized this repository with a basic Next.js homepage.
 2. Enhance the design using Tailwind CSS.
 3. Add a basic description of your team's AI company vision.
 4. Commit and push the changes.
+
+## UNDERSTANDING YOUR STACK
+- **OpenClaw:** Your AI Workbench (where the AI lives).
+- **GitHub:** Your Code Storage (Source of Truth).
+- **Vercel:** Your Live Website (https://team-02.apps.digitalcoa.ch).
+
+**Crucial Guardrail:** Do NOT ask the AI to commit `node_modules` or large system files. The AI is instructed to keep the repository clean.
