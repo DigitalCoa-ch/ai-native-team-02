@@ -60,21 +60,43 @@ export function DiscoverPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Search bar */}
-      <div className="flex gap-3">
+      <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           placeholder="Search startups by name, sector, or keyword..."
-          className="flex-1 px-4 py-2.5 text-sm border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+          style={{
+            flex: 1,
+            padding: "0.75rem 1rem",
+            fontSize: "0.8125rem",
+            color: "#000000",
+            backgroundColor: "#ffffff",
+            border: "1px solid #d4d4d4",
+            outline: "none",
+            transition: "border-color 0.15s ease",
+          }}
+          onFocus={(e) => (e.target.style.borderColor = "#000000")}
+          onBlur={(e) => (e.target.style.borderColor = "#d4d4d4")}
         />
         <button
           onClick={handleSearch}
           disabled={loading}
-          className="px-6 py-2.5 text-sm font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+          style={{
+            padding: "0.75rem 1.5rem",
+            fontSize: "0.8125rem",
+            fontWeight: 500,
+            letterSpacing: "0.02em",
+            color: "#ffffff",
+            backgroundColor: "#000000",
+            border: "1px solid #000000",
+            cursor: loading ? "default" : "pointer",
+            opacity: loading ? 0.5 : 1,
+            transition: "background-color 0.15s ease",
+          }}
         >
           {loading ? "Searching..." : "Search"}
         </button>
@@ -84,22 +106,40 @@ export function DiscoverPanel() {
             setSearched(false);
             setQuery("");
           }}
-          className="px-4 py-2.5 text-sm text-zinc-600 border border-zinc-300 rounded-lg hover:bg-zinc-50 dark:text-zinc-400 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          style={{
+            padding: "0.75rem 1rem",
+            fontSize: "0.8125rem",
+            fontWeight: 500,
+            color: "#767676",
+            backgroundColor: "#ffffff",
+            border: "1px solid #d4d4d4",
+            cursor: "pointer",
+            transition: "border-color 0.15s ease",
+          }}
         >
           Clear
         </button>
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label style={{ display: "block", fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", marginBottom: "0.5rem" }}>
             Sector
           </label>
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            className="w-full px-4 py-2.5 text-sm border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+            style={{
+              width: "100%",
+              padding: "0.75rem 1rem",
+              fontSize: "0.8125rem",
+              color: "#000000",
+              backgroundColor: "#ffffff",
+              border: "1px solid #d4d4d4",
+              outline: "none",
+              cursor: "pointer",
+            }}
           >
             {SECTORS.map((s) => (
               <option key={s} value={s === "All Sectors" ? "" : s}>
@@ -109,19 +149,27 @@ export function DiscoverPanel() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label style={{ display: "block", fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", marginBottom: "0.5rem" }}>
             Impact Areas
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem", paddingTop: "0.25rem" }}>
             {IMPACT_AREAS.map((area) => (
               <button
                 key={area}
                 onClick={() => handleToggleImpact(area)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
-                  selectedImpact.includes(area)
-                    ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                    : "border-zinc-300 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400"
-                }`}
+                style={{
+                  padding: "0.25rem 0.75rem",
+                  fontSize: "0.6875rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                  color: selectedImpact.includes(area) ? "#ffffff" : "#767676",
+                  backgroundColor: selectedImpact.includes(area) ? "#000000" : "transparent",
+                  border: "1px solid",
+                  borderColor: selectedImpact.includes(area) ? "#000000" : "#d4d4d4",
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                }}
               >
                 {area}
               </button>
@@ -132,38 +180,52 @@ export function DiscoverPanel() {
 
       {/* Results */}
       {!searched ? (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-2xl">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6rem 0", textAlign: "center" }}>
+          <div style={{ width: "64px", height: "64px", backgroundColor: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem", marginBottom: "1rem" }}>
             🔍
           </div>
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          <h3 style={{ fontSize: "1.125rem", fontWeight: 500, letterSpacing: "-0.01em", color: "#000000", margin: 0 }}>
             Discover Impact Startups
           </h3>
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-md">
-            Search for sustainability-driven startups by name, sector, or impact
-            area. Our AI agents will analyze and score each opportunity.
+          <p style={{ fontSize: "0.8125rem", color: "#767676", marginTop: "0.5rem", maxWidth: "400px" }}>
+            Search for sustainability-driven startups by name, sector, or impact area.
           </p>
         </div>
       ) : startups.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-2xl">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6rem 0", textAlign: "center" }}>
+          <div style={{ width: "64px", height: "64px", backgroundColor: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.5rem", marginBottom: "1rem" }}>
             📭
           </div>
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          <h3 style={{ fontSize: "1.125rem", fontWeight: 500, letterSpacing: "-0.01em", color: "#000000", margin: 0 }}>
             No startups found
           </h3>
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <p style={{ fontSize: "0.8125rem", color: "#767676", marginTop: "0.5rem" }}>
             Try adjusting your filters or using different keywords.
           </p>
         </div>
       ) : (
         <div>
-          <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
-            Found {startups.length} startup{startups.length !== 1 ? "s" : ""}
+          <p style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", marginBottom: "1rem" }}>
+            {startups.length} startup{startups.length !== 1 ? "s" : ""} found
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {startups.map((s) => (
-              <StartupCard key={s.id} startup={s} />
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+            gap: 0,
+            border: "1px solid #e5e5e5",
+          }}>
+            {startups.map((s, i) => (
+              <div
+                key={s.id}
+                style={{
+                  borderRight: (i + 1) % 3 !== 0 ? "1px solid #e5e5e5" : "none",
+                  borderBottom: Math.ceil(startups.length / 3) * 3 > startups.length ? "1px solid #e5e5e5" : "none",
+                }}
+              >
+                <div style={{ padding: "1.5rem", borderBottom: "1px solid #e5e5e5" }}>
+                  <StartupCard startup={s} />
+                </div>
+              </div>
             ))}
           </div>
         </div>

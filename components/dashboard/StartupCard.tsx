@@ -3,17 +3,11 @@
 import { useState } from "react";
 import type { Startup } from "@/types";
 
-const IMPACT_COLORS: Record<string, string> = {
-  high: "text-green-600 dark:text-green-400",
-  medium: "text-amber-600 dark:text-amber-400",
-  low: "text-red-600 dark:text-red-400",
-};
-
 function getScoreColor(score?: number | null) {
-  if (score === null || score === undefined) return "text-zinc-400";
-  if (score >= 0.7) return IMPACT_COLORS.high;
-  if (score >= 0.4) return IMPACT_COLORS.medium;
-  return IMPACT_COLORS.low;
+  if (score === null || score === undefined) return "#767676";
+  if (score >= 0.7) return "#000000";
+  if (score >= 0.4) return "#404040";
+  return "#767676";
 }
 
 interface StartupCardProps {
@@ -30,13 +24,23 @@ export function StartupCard({ startup, onAddToWatchlist }: StartupCardProps) {
   };
 
   return (
-    <div className="flex flex-col p-5 bg-white border border-zinc-200 rounded-xl hover:border-zinc-300 transition-colors dark:bg-zinc-950 dark:border-zinc-800 dark:hover:border-zinc-700">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-50 truncate">
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        border: "1px solid #e5e5e5",
+        padding: "1.5rem",
+        transition: "border-color 0.15s ease",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#000000")}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#e5e5e5")}
+    >
+      {/* Header row */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{ fontSize: "1rem", fontWeight: 500, letterSpacing: "-0.01em", color: "#000000", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {startup.name}
           </h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "#767676", margin: "0.25rem 0 0 0" }}>
             {startup.sector} · {startup.industry}
           </p>
         </div>
@@ -44,74 +48,91 @@ export function StartupCard({ startup, onAddToWatchlist }: StartupCardProps) {
           <img
             src={startup.logoUrl}
             alt={startup.name}
-            className="w-10 h-10 rounded-lg object-cover flex-shrink-0 ml-3"
+            style={{ width: "40px", height: "40px", objectFit: "cover", marginLeft: "0.75rem", flexShrink: 0 }}
           />
         ) : (
-          <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-lg flex-shrink-0 ml-3">
+          <div style={{
+            width: "40px", height: "40px", backgroundColor: "#f5f5f5",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            marginLeft: "0.75rem", flexShrink: 0, fontSize: "1rem"
+          }}>
             🌱
           </div>
         )}
       </div>
 
-      <p className="flex-1 text-sm text-zinc-600 dark:text-zinc-300 line-clamp-3 mb-4">
+      {/* Description */}
+      <p style={{ fontSize: "0.8125rem", color: "#404040", lineHeight: 1.5, marginBottom: "1rem", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
         {startup.description}
       </p>
 
+      {/* Impact Areas */}
       {startup.impactArea && startup.impactArea.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem", marginBottom: "1rem" }}>
           {startup.impactArea.slice(0, 4).map((area) => (
-            <span
-              key={area}
-              className="px-2 py-0.5 text-xs font-medium bg-green-50 text-green-700 rounded-full dark:bg-green-900/30 dark:text-green-400"
-            >
+            <span key={area} style={{
+              display: "inline-flex", alignItems: "center",
+              padding: "0.125rem 0.5rem",
+              fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.04em",
+              color: "#e63329", border: "1px solid #e63329",
+              textTransform: "uppercase"
+            }}>
               {area}
             </span>
           ))}
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      {/* Scores */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem", marginBottom: "1rem", paddingBottom: "1rem", borderBottom: "1px solid #f5f5f5" }}>
         <div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Impact</p>
-          <p className={`text-sm font-semibold ${getScoreColor(startup.impactScore)}`}>
-            {startup.impactScore != null
-              ? `${Math.round(startup.impactScore * 100)}%`
-              : "—"}
+          <p style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", margin: "0 0 0.25rem 0" }}>Impact</p>
+          <p style={{ fontSize: "0.875rem", fontWeight: 500, color: getScoreColor(startup.impactScore), margin: 0 }}>
+            {startup.impactScore != null ? `${Math.round(startup.impactScore * 100)}%` : "—"}
           </p>
         </div>
         <div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Financial</p>
-          <p className={`text-sm font-semibold ${getScoreColor(startup.financialScore)}`}>
-            {startup.financialScore != null
-              ? `${Math.round(startup.financialScore * 100)}%`
-              : "—"}
+          <p style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", margin: "0 0 0.25rem 0" }}>Financial</p>
+          <p style={{ fontSize: "0.875rem", fontWeight: 500, color: getScoreColor(startup.financialScore), margin: 0 }}>
+            {startup.financialScore != null ? `${Math.round(startup.financialScore * 100)}%` : "—"}
           </p>
         </div>
         <div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Overall</p>
-          <p className={`text-sm font-semibold ${getScoreColor(startup.overallScore)}`}>
-            {startup.overallScore != null
-              ? `${Math.round(startup.overallScore * 100)}%`
-              : "—"}
+          <p style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "#767676", margin: "0 0 0.25rem 0" }}>Overall</p>
+          <p style={{ fontSize: "0.875rem", fontWeight: 500, color: getScoreColor(startup.overallScore), margin: 0 }}>
+            {startup.overallScore != null ? `${Math.round(startup.overallScore * 100)}%` : "—"}
           </p>
         </div>
       </div>
 
-      <div className="flex gap-2">
+      {/* Actions */}
+      <div style={{ display: "flex", gap: "0.5rem" }}>
         <a
           href={`/startups/${startup.id}`}
-          className="flex-1 text-center px-3 py-2 text-sm font-medium text-zinc-900 border border-zinc-300 rounded-lg hover:bg-zinc-50 dark:text-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          style={{
+            flex: 1, textAlign: "center", padding: "0.5rem 1rem",
+            fontSize: "0.8125rem", fontWeight: 500, letterSpacing: "0.02em",
+            color: "#000000", border: "1px solid #d4d4d4",
+            transition: "border-color 0.15s ease",
+            display: "inline-block",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#000000")}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#d4d4d4")}
         >
           View Details
         </a>
         <button
           onClick={handleSave}
           disabled={saved}
-          className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-            saved
-              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-              : "bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900"
-          }`}
+          style={{
+            padding: "0.5rem 1rem",
+            fontSize: "0.8125rem", fontWeight: 500, letterSpacing: "0.02em",
+            color: saved ? "#e63329" : "#ffffff",
+            backgroundColor: saved ? "transparent" : "#000000",
+            border: saved ? "1px solid #e63329" : "1px solid #000000",
+            cursor: saved ? "default" : "pointer",
+            transition: "all 0.15s ease",
+          }}
         >
           {saved ? "✓ Saved" : "+ Watch"}
         </button>
