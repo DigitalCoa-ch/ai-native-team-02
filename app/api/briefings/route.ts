@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateBriefing } from "@/lib/briefing/agent";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const topic = body.topic?.trim();
