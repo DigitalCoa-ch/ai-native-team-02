@@ -12,6 +12,7 @@
     "@langchain/core": "^1.1.46",
     "@langchain/openai": "^1.4.5",
     "@prisma/client": "^6.19.3",
+    "@tavily/core": "^0.7.3",
     "clsx": "^2.1.1",
     "lucide-react": "^1.16.0",
     "next": "^16.2.6",
@@ -20,8 +21,8 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
-    "@types/react": "^18.3.3",
+    "@types/node": "20.19.41",
+    "@types/react": "18.3.29",
     "@types/react-dom": "^18.3.0",
     "prisma": "^6.19.3",
     "typescript": "^5.5.2"
