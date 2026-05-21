@@ -1,6 +1,6 @@
 "use server";
 
-import { ChatOpenAI } from "@langchain/openai";
+import { Groq } from "groq-sdk";
 
 export interface RiskItem {
   description: string;
@@ -31,16 +31,15 @@ export async function generateBriefing(topic: string): Promise<BriefingResult> {
 
   const prompt = `You are a senior financial and geopolitical risk analyst. TOPIC: ${topic}\nSEARCH RESULTS:\n${searchText}\n\nProvide a JSON response with this structure (no markdown, just plain JSON):\n{\n  "summary": "2-3 sentence summary",\n  "risks": [{"description": "...", "confidence": 0.0-1.0, "category": "financial|geopolitical|sector", "potentialImpact": "..."}],\n  "geoContext": "context or null",\n  "sources": ["url1"]\n}`;
 
-  const llm = new ChatOpenAI({ modelName: "gpt-4o", temperature: 0.3, openAIApiKey: process.env.OPENAI_API_KEY ?? "" });
-  const response = await llm.invoke(prompt);
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY ?? "" });
+  const response = await groq.chat.completions.create({
+    model: "llama-3.1-8b-instant",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.3,
+    max_tokens: 2048,
+  });
 
-  let text = "";
-  if (typeof response === "string") text = response;
-  else if (response && typeof response === "object" && "text" in response) text = String((response as { text: unknown }).text);
-  else if (response && typeof response === "object") text = String(response);
-
-  // Strip markdown code blocks if present
-  text = text.replace(/^```json\s*/i, "").replace(/^```\s*/m, "").replace(/\s*```$/, "").trim();
+  const text = response.choices[0]?.message?.content ?? "";
 
   let parsed: Record<string, unknown>;
   try {
